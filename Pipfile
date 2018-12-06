@@ -14,3 +14,7 @@ flake8-tidy-imports = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+benchmark = "python -m aoc2018"
+lint = "python -m flake8"
