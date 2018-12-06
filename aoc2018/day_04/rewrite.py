@@ -10,6 +10,7 @@ def main():
     # a given minute (minutes are the list's indices).
     guards = defaultdict(lambda: [0, [0] * 59])
 
+    guard = None
     sleepiest_guard = None  # The ID of the guard with the highest total of minutes slept.
     sleepiest_guard_2 = (None, None, -1)  # guard_id, minute, minute_freq
 

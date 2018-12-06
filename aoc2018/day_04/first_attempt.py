@@ -6,6 +6,7 @@ def main():
         log.sort(key=lambda e: e[:17])
 
     guards = defaultdict(list)
+    guard = None
     sleepiest_guard = None
 
     for entry in log:

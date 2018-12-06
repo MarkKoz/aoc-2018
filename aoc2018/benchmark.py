@@ -67,9 +67,11 @@ def benchmark_modules(modules: Sequence[str], no_executions: int = 1):
             run_benchmark(package, module, no_executions)
 
 
-def benchmark_days(days: Sequence[int] = range(1, 26), no_executions: int = 1):
+def benchmark_days(days: Sequence[int] = None, no_executions: int = 1):
     """Benchmark all modules for the given days."""
     print(f'Results for benchmarks with {no_executions} executions:')
+    if not days:
+        days = range(1, 26)
 
     for i in days:
         package = f'day_{i:02d}'

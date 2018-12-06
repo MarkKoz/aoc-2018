@@ -28,5 +28,6 @@ def main():
 
         return area, good
 
+
 if __name__ == '__main__':
     print(main())

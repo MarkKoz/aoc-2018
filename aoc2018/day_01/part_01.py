@@ -5,5 +5,6 @@ def main():
             freq = eval(f'freq {f}')
         return freq
 
+
 if __name__ == '__main__':
     print(main())
