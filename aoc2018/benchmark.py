@@ -8,7 +8,6 @@ from typing import Sequence
 
 ORIGINAL_CWD = os.getcwd()
 PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
-print(PACKAGE_ROOT)
 
 # Make timeit return the value of the function it timed.
 timeit.template = """
@@ -70,14 +69,15 @@ def benchmark_modules(modules: Sequence[str], no_executions: int = 1):
 def benchmark_days(days: Sequence[int] = None, no_executions: int = 1):
     """Benchmark all modules for the given days."""
     print(f'Results for benchmarks with {no_executions} executions:')
-    if not days:
-        days = range(1, 26)
 
-    for i in days:
+    for i in days or range(1, 26):
         package = f'day_{i:02d}'
-        print(package)
+        modules = tuple(pkgutil.iter_modules([os.path.join(PACKAGE_ROOT, package)]))
 
-        for module in pkgutil.iter_modules([os.path.join(PACKAGE_ROOT, package)]):
+        if modules:
+            print(package)
+
+        for module in modules:
             if module.name[0] != '_':
                 run_benchmark(package, module.name, no_executions)
 
