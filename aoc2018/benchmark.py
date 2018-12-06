@@ -1,11 +1,14 @@
 import argparse
 import os
 import pkgutil
+import sys
 import timeit
 from collections import OrderedDict
 from typing import Sequence
 
 ORIGINAL_CWD = os.getcwd()
+PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
+print(PACKAGE_ROOT)
 
 # Make timeit return the value of the function it timed.
 timeit.template = """
@@ -19,14 +22,19 @@ def inner(_it, _timer{init}):
     return _t1 - _t0, retval
 """
 
+
 def run_benchmark(package: str, module: str, no_executions: int = 1):
-    """Benchmark a module from a package and log the results."""
-    cwd = os.path.join(os.getcwd(), package)
+    cwd = os.path.join(PACKAGE_ROOT, package)
+    os.chdir(cwd)
+    sys.path.insert(0, PACKAGE_ROOT)
+
     time, output = timeit.timeit(
         'retval = main()',
-        setup=f'import os; os.chdir({repr(cwd)}); from {package}.{module} import main',
+        setup=f'from {package}.{module} import main',
         number=no_executions
     )
+
+    del sys.path[0]
     os.chdir(ORIGINAL_CWD)
 
     try:
@@ -67,7 +75,7 @@ def benchmark_days(days: Sequence[int] = range(1, 26), no_executions: int = 1):
         package = f'day_{i:02d}'
         print(package)
 
-        for module in pkgutil.iter_modules([package]):
+        for module in pkgutil.iter_modules([os.path.join(PACKAGE_ROOT, package)]):
             if module.name[0] != '_':
                 run_benchmark(package, module.name, no_executions)
 
